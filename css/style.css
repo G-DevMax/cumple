@@ -1,0 +1,787 @@
+/* ==========================================================================
+   Variables y Configuración Global
+   ========================================================================== */
+:root {
+    /* Paleta de Colores Premium */
+    --color-bg-dark: #0a0510;
+    /* Negro con toque violeta */
+    --color-bg-light: #1c0b2b;
+    /* Violeta muy oscuro para el fondo final */
+    --color-cake-base: #b19cd9;
+    /* Morado pastel */
+    --color-cake-shadow: #7a5c96;
+    --color-frosting: #f8f4ff;
+    /* Crema/Blanco roto */
+    --color-gold: #ffd700;
+    --color-gold-glow: rgba(255, 215, 0, 0.5);
+    --color-text: #f8f4ff;
+
+    /* Tipografía */
+    --font-primary: 'Life Savers', cursive;
+
+    /* Tiempos de Animación */
+    --transition-slow: 1.5s ease-in-out;
+    --transition-medium: 0.8s ease-out;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--color-bg-dark);
+    color: var(--color-text);
+    overflow: hidden;
+    /* Evitar scroll horizontal y vertical durante la experiencia */
+    height: 100%;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color var(--transition-slow);
+}
+
+/* ==========================================================================
+   1. Pantalla Inicial - Vela
+   ========================================================================== */
+#candle-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-slow);
+}
+
+#candle-screen.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.candle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.candle-container:hover {
+    transform: scale(1.05);
+}
+
+.candle {
+    position: relative;
+    width: 40px;
+    height: 120px;
+    background: linear-gradient(to right, #f8f4ff, #e0d5ec, #f8f4ff);
+    border-radius: 4px;
+    box-shadow: inset 0 -10px 10px rgba(0, 0, 0, 0.1);
+}
+
+.wick {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 12px;
+    background: #333;
+    border-radius: 2px;
+}
+
+.flame {
+    position: absolute;
+    top: -45px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 35px;
+    background: radial-gradient(ellipse at bottom, #fff 10%, #ffd700 40%, #ff8c00 80%, transparent 100%);
+    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+    box-shadow: 0 0 20px 5px rgba(255, 140, 0, 0.6), 0 0 40px 15px rgba(255, 215, 0, 0.4);
+    animation: flicker 0.5s infinite alternate;
+    transform-origin: bottom center;
+}
+
+.candle-container.extinguished .flame {
+    animation: extinguish 0.5s forwards;
+}
+
+.hint-text {
+    margin-top: 30px;
+    font-size: 1.2rem;
+    opacity: 0.7;
+    letter-spacing: 2px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes flicker {
+    0% {
+        transform: translateX(-50%) scale(1);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: translateX(-50%) scale(1.05) rotate(2deg);
+        opacity: 1;
+    }
+}
+
+@keyframes extinguish {
+    0% {
+        transform: translateX(-50%) scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateX(-50%) scale(1.5);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: translateX(-50%) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* ==========================================================================
+   Estructura Principal (Revelación)
+   ========================================================================== */
+#main-screen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 5%;
+    opacity: 0;
+    pointer-events: none;
+    position: relative;
+    z-index: 10;
+}
+
+/* Estado activo del main-screen */
+body.revealed {
+    background: radial-gradient(circle at center, var(--color-bg-light) 0%, var(--color-bg-dark) 80%);
+}
+
+#main-screen.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ==========================================================================
+   2. Centro: Torta y SVG
+   ========================================================================== */
+.center-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.center-stage {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.special-message {
+    color: #ffffff;
+    font-size: 1.2rem;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    transform: translateY(10px);
+    text-align: center;
+    font-weight: 700;
+    max-width: 450px;
+
+}
+
+.special-message.visible {
+    animation: fadeInMessage 1.5s ease-out forwards;
+}
+
+@keyframes fadeInMessage {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.svg-text-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.svg-text {
+    fill: var(--color-gold);
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    opacity: 0;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.svg-text.visible {
+    animation: fadeInText 1.5s forwards;
+}
+
+@keyframes fadeInText {
+    from {
+        opacity: 0;
+        filter: blur(4px);
+    }
+
+    to {
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+
+/* Torta CSS */
+.cake-container {
+    position: relative;
+    z-index: 15;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.cake-container.visible {
+    animation: revealCake 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes revealCake {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: drop-shadow(0 0 30px rgba(177, 156, 217, 0.4));
+    }
+}
+
+.cake {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.tier {
+    background: linear-gradient(to right, var(--color-cake-shadow) 0%, var(--color-cake-base) 20%, var(--color-cake-base) 80%, var(--color-cake-shadow) 100%);
+    position: relative;
+    border-radius: 8px 8px 4px 4px;
+}
+
+.top-tier {
+    width: 120px;
+    height: 80px;
+    z-index: 2;
+}
+
+.bottom-tier {
+    width: 180px;
+    height: 100px;
+    z-index: 1;
+}
+
+.frosting {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background: var(--color-frosting);
+    border-radius: 8px 8px 0 0;
+    box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.drips {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.drip {
+    width: 12px;
+    background: var(--color-frosting);
+    border-radius: 0 0 10px 10px;
+}
+
+.top-tier .d1 {
+    height: 25px;
+}
+
+.top-tier .d2 {
+    height: 15px;
+}
+
+.top-tier .d3 {
+    height: 35px;
+}
+
+.top-tier .d4 {
+    height: 20px;
+}
+
+.top-tier .d5 {
+    height: 30px;
+}
+
+.bottom-tier .d1 {
+    height: 20px;
+}
+
+.bottom-tier .d2 {
+    height: 40px;
+}
+
+.bottom-tier .d3 {
+    height: 15px;
+}
+
+.bottom-tier .d4 {
+    height: 30px;
+}
+
+.bottom-tier .d5 {
+    height: 25px;
+}
+
+.bottom-tier .d6 {
+    height: 45px;
+}
+
+.bottom-tier .d7 {
+    height: 20px;
+}
+
+.plate {
+    width: 220px;
+    height: 15px;
+    background: linear-gradient(to bottom, #ddd, #999);
+    border-radius: 50%;
+    margin-top: -5px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+    z-index: 0;
+}
+
+.candle-small {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 30px;
+    background: repeating-linear-gradient(45deg, #fff, #fff 5px, #ffb6c1 5px, #ffb6c1 10px);
+    border-radius: 2px;
+}
+
+.flame-small {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 18px;
+    background: #ffd700;
+    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+    box-shadow: 0 0 10px #ff8c00;
+    animation: flickerSmall 0.6s infinite alternate;
+}
+
+@keyframes flickerSmall {
+    0% {
+        transform: translateX(-50%) scale(1);
+    }
+
+    100% {
+        transform: translateX(-50%) scale(1.1) rotate(3deg);
+    }
+}
+
+.decorations {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.sprinkle {
+    position: absolute;
+    width: 6px;
+    height: 3px;
+    background: var(--color-gold);
+    border-radius: 2px;
+}
+
+.s1 {
+    top: 40px;
+    left: 20px;
+    transform: rotate(45deg);
+}
+
+.s2 {
+    top: 60px;
+    left: 50px;
+    transform: rotate(-20deg);
+}
+
+.s3 {
+    top: 30px;
+    left: 100px;
+    transform: rotate(70deg);
+}
+
+.s4 {
+    top: 70px;
+    left: 130px;
+    transform: rotate(10deg);
+}
+
+.s5 {
+    top: 50px;
+    left: 150px;
+    transform: rotate(-45deg);
+}
+
+/* ==========================================================================
+   4. Fotografías
+   ========================================================================== */
+.photos-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 25%;
+    max-width: 200px;
+}
+
+.photo {
+    background: #fff;
+    padding: 10px 10px 35px 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+    border-radius: 2px;
+    position: relative;
+}
+
+.photo img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    background-color: #eee;
+    /* Fallback gris */
+    display: block;
+}
+
+/* Animación de entrada para fotos */
+.photo.visible {
+    animation: floatInPhoto 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes floatInPhoto {
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Rotaciones desordenadas para dar aspecto orgánico */
+.left-photos .photo-1.visible {
+    rotate: -4deg;
+}
+
+.left-photos .photo-2.visible {
+    rotate: 4deg;
+}
+
+.left-photos .photo-3.visible {
+    rotate: -3deg;
+}
+
+.right-photos .photo-4.visible {
+    rotate: 4deg;
+}
+
+.right-photos .photo-5.visible {
+    rotate: -2deg;
+}
+
+.right-photos .photo-6.visible {
+    rotate: -6deg;
+}
+
+
+/* ==========================================================================
+   6. Reproductor de Música
+   ========================================================================== */
+.music-player-container {
+    position: fixed; /* Ahora es flotante siempre */
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    opacity: 0;
+    transition: opacity 1s ease, transform 1s ease;
+    z-index: 1000; /* Asegurar que este encima de todo */
+}
+
+.music-player-container.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.custom-player {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 320px;
+}
+
+.play-btn {
+    background: var(--color-gold);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: var(--color-bg-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.play-btn:hover {
+    transform: scale(1.05);
+    background: #ffec8b;
+}
+
+.play-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.track-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.track-name {
+    font-size: 0.9rem;
+    font-family: sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--color-gold);
+    border-radius: 2px;
+    transition: width 0.1s linear;
+}
+
+.volume-control {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.volume-control:hover {
+    opacity: 1;
+}
+
+/* Guirnaldas Florales */
+.floral-garland {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 5;
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+}
+
+.flower-banner {
+    width: 100%;
+    height: auto;
+    max-height: 150px;
+    object-fit: contain;
+}
+
+.floral-garland.visible {
+    animation: fadeInFloral 1.5s ease-out forwards;
+}
+
+.top-garland {
+    top: 20px;
+}
+
+.bottom-garland {
+    display: none; /* Oculto en escritorio */
+    bottom: 100px;
+    transform: translateY(20px);
+}
+
+@keyframes fadeInFloral {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   5. Diseño Responsive
+   ========================================================================== */
+@media (max-width: 900px) {
+    html {
+        overflow-y: auto !important;
+        overflow-x: hidden;
+        height: auto !important;
+    }
+
+    body {
+        overflow-y: auto !important;
+        overflow-x: hidden;
+        height: auto !important;
+        min-height: 100vh;
+    }
+
+    #main-screen {
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 5vh;
+        padding-bottom: 100px; /* Espacio para el reproductor flotante */
+        overflow: visible;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .photos-container {
+        flex-direction: row;
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        order: 1;
+        /* Fotos arriba */
+    }
+
+    .left-photos {
+        order: 1;
+        margin-bottom: 10px;
+    }
+
+    .top-garland {
+        position: relative;
+        top: auto;
+        bottom: auto;
+        order: 2;
+        margin-bottom: 10px;
+        transform: translateY(-10px);
+    }
+
+    .center-column {
+        order: 3;
+        transform: scale(0.9);
+        margin: 10px 0;
+    }
+
+    .bottom-garland {
+        display: block; /* Visible en móvil */
+        position: relative;
+        top: auto;
+        bottom: auto;
+        order: 4;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        transform: translateY(10px);
+    }
+
+    .right-photos {
+        order: 5;
+        margin-top: 10px;
+        margin-bottom: 100px;
+    }
+
+    .photo {
+        width: 100px;
+        /* Más pequeñas en móvil */
+        padding: 5px 5px 20px 5px;
+    }
+
+    .music-player-container {
+        position: fixed !important;
+        bottom: 20px;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 90%;
+        max-width: 320px;
+        z-index: 1000 !important;
+    }
+
+    .music-player-container.visible {
+        transform: translateX(-50%) translateY(0) !important;
+    }
+
+    .custom-player {
+        width: 100%;
+    }
+}

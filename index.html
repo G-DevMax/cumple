@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TQM <3 </title>
+            <!-- Google Fonts: Life Savers -->
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Life+Savers:wght@400;700;800&display=swap"
+                rel="stylesheet">
+            <!-- CSS -->
+            <link rel="stylesheet" href="css/style.css">
+            <link rel="icon" type="image/png" href="images/images.png">
+</head>
+
+<body>
+
+    <!-- 1. Pantalla inicial — Vela -->
+    <div id="candle-screen" class="active">
+        <div class="candle-container" id="candle-trigger">
+            <div class="candle">
+                <div class="flame"></div>
+                <div class="wick"></div>
+                <div class="wax"></div>
+            </div>
+            <p class="hint-text">Sopla la vela</p>
+        </div>
+    </div>
+
+    <!-- Contenedor principal de la revelación -->
+    <div id="main-screen">
+
+        <!-- Guirnalda Superior -->
+        <div class="floral-garland top-garland">
+            <img src="images/flores.svg" alt="Guirnalda Floral" class="flower-banner" />
+        </div>
+
+        <!-- 4. Fotografías (Agrupadas para diseño responsive) -->
+        <div class="photos-container left-photos">
+            <div class="photo polaroid photo-1">
+                <img src="images/foto1.jpg" alt="Foto 1">
+            </div>
+            <div class="photo polaroid photo-2">
+                <img src="images/foto6.jpg" alt="Foto 2">
+            </div>
+            <div class="photo polaroid photo-3">
+                <img src="images/foto3.jpg" alt="Foto 3">
+            </div>
+        </div>
+
+        <!-- Centro: Torta y Textos -->
+        <div class="center-column">
+            <div class="center-stage">
+
+                <!-- 3. Textos curvos en SVG -->
+                <div class="svg-text-container">
+                    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <!-- Arco superior para "Feliz cumpleaños" -->
+                            <path id="top-arc" d="M 60,200 A 140,140 0 0,1 340,200" />
+                            <!-- Arco inferior para el nombre. -->
+                            <path id="bottom-arc" d="M 60,200 A 140,140 0 0,0 340,200" />
+                        </defs>
+                        <text class="svg-text title-text">
+                            <textPath href="#top-arc" startOffset="50%" text-anchor="middle" id="svg-title-text">
+                                Feliz Cumpleaños
+                            </textPath>
+                        </text>
+                        <text class="svg-text name-text" dy="30">
+                            <textPath href="#bottom-arc" startOffset="50%" text-anchor="middle" id="svg-name-text">
+                                Juan
+                            </textPath>
+                        </text>
+                    </svg>
+                </div>
+
+                <!-- 2. Torta de cumpleaños -->
+                <div class="cake-container">
+                    <div class="cake">
+                        <div class="tier top-tier">
+                            <div class="frosting"></div>
+                            <div class="drips">
+                                <div class="drip d1"></div>
+                                <div class="drip d2"></div>
+                                <div class="drip d3"></div>
+                                <div class="drip d4"></div>
+                                <div class="drip d5"></div>
+                            </div>
+                            <div class="candle-small">
+                                <div class="flame-small"></div>
+                            </div>
+                        </div>
+                        <div class="tier bottom-tier">
+                            <div class="frosting"></div>
+                            <div class="drips">
+                                <div class="drip d1"></div>
+                                <div class="drip d2"></div>
+                                <div class="drip d3"></div>
+                                <div class="drip d4"></div>
+                                <div class="drip d5"></div>
+                                <div class="drip d6"></div>
+                                <div class="drip d7"></div>
+                            </div>
+                            <div class="decorations">
+                                <!-- Sprinkles o detalles pequeños -->
+                                <div class="sprinkle s1"></div>
+                                <div class="sprinkle s2"></div>
+                                <div class="sprinkle s3"></div>
+                                <div class="sprinkle s4"></div>
+                                <div class="sprinkle s5"></div>
+                            </div>
+                        </div>
+                        <div class="plate"></div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Mensaje especial debajo de la torta -->
+            <p class="special-message" id="special-message"></p>
+        </div>
+
+        <!-- 4. Fotografías (Agrupadas derecha) -->
+        <div class="photos-container right-photos">
+            <div class="photo polaroid photo-4">
+                <img src="images/foto4.jpg" alt="Foto 4">
+            </div>
+            <div class="photo polaroid photo-5">
+                <img src="images/foto5.jpg" alt="Foto 5">
+            </div>
+            <div class="photo polaroid photo-6">
+                <img src="images/foto2.jpg" alt="Foto 6">
+            </div>
+        </div>
+
+        <!-- Guirnalda Inferior -->
+        <div class="floral-garland bottom-garland">
+            <img src="images/flores.svg" alt="Guirnalda Floral" class="flower-banner" />
+        </div>
+
+    </div>
+
+    <!-- 6. Reproductor de música (Flotante) -->
+    <div class="music-player-container">
+        <audio id="bg-music" src="music/cancion.mp3"></audio>
+        <div class="custom-player" id="custom-player">
+            <button id="play-pause-btn" class="play-btn">
+                <!-- Icono de Play en SVG -->
+                <svg id="play-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                </svg>
+                <!-- Icono de Pause en SVG (Oculto inicialmente) -->
+                <svg id="pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                </svg>
+            </button>
+            <div class="track-info">
+                <span class="track-name" id="track-name-display">Tu Canción Favorita</span>
+                <div class="progress-bar-container" id="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+            </div>
+            <div class="volume-control">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path
+                        d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Librería de Confeti (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Script principal -->
+    <script src="js/script.js"></script>
+</body>
+
+</html>
